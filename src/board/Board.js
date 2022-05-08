@@ -36,6 +36,23 @@ export default function Board(props) {
         tmpPossibilities = updateCell(i, col, chosenNumber, tmpPossibilities)
       }
     }
+
+    // update the boxes
+    for (let i = row-2; i <= row + 2; i++){
+
+      // if it is in the same row of boxes
+      if ((Math.floor(i/3) == Math.floor(row/3)) && i != row){
+
+        for (let j = col-2; j <= col + 2; j++){
+
+          // if it is the same column of boxes
+          if ((Math.floor(j/3) == Math.floor(col/3)) && col != j){
+            tmpPossibilities = updateCell(i, j, chosenNumber, tmpPossibilities)
+          }
+        }
+      }
+    }
+
     setPossibilities(tmpPossibilities)
     
   }
