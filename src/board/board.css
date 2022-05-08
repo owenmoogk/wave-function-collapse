@@ -1,0 +1,50 @@
+.board{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.cell{
+  width: 70px;
+  height: 70px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-self: center;
+}
+
+.verticalBar{
+  height: 72px;
+  width: 2px;
+  background-color: black;
+}
+
+.horizontalBar{
+  width: 100%;
+  height: 2px;
+  background-color: black;
+}
+
+.possibility{
+  flex: 0 0 33%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.finalNumber{
+  flex: 0 0 100%;
+  text-align: center;
+  font-size: 25px;
+}
