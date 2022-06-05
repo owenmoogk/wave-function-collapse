@@ -4,25 +4,18 @@ import Cell from './Cell'
 
 export default function Board(props) {
 
-  let startingPossibilities = []
-  for (let row = 0; row < 9; row++) {
-    startingPossibilities.push([])
-    for (let column = 0; column < 9; column++) {
-      startingPossibilities[row].push([1,2,3,4,5,6,7,8,9])
-    }
-  }
-  
-  // possibilities is a 3d array, containing the possibilities for each of the 81 squares. the third dimensions may be an...
-  // array => representing possibilities
-  // number => representing a final choice
-  // undefined => representing an improper collapse (no valid options)
-  const [possibilities, setPossibilities] = useState(startingPossibilities)
-
   function cellClicked(row, col, chosenNumber){
 
     let tmpPossibilities = JSON.parse(JSON.stringify(possibilities))
     tmpPossibilities[row][col] = chosenNumber
     
+    tmpPossibilities = updatePossibilities(row, col, chosenNumber, tmpPossibilities)
+
+    setPossibilities(tmpPossibilities)
+    
+  }
+
+  function updatePossibilities(row, col, chosenNumber, tmpPossibilities){
     // update the rows
     for (let i = 0; i < 9; i++){
       if (i != col){
@@ -53,8 +46,7 @@ export default function Board(props) {
       }
     }
 
-    setPossibilities(tmpPossibilities)
-    
+    return tmpPossibilities
   }
 
   function updateCell(row, col, chosenNumber, tmpPossibilities){
@@ -88,6 +80,39 @@ export default function Board(props) {
     return tmpPossibilities
   }
 
+  let startingPossibilities = []
+  for (let row = 0; row < 9; row++) {
+    startingPossibilities.push([])
+    for (let column = 0; column < 9; column++) {
+
+      // if the value was set by the user
+      if (props.entranceValues[row][column]){
+        startingPossibilities[row].push(parseInt(props.entranceValues[row][column]))
+      }
+      // if the value was not set, then set all possibilities
+      else{
+        startingPossibilities[row].push([1,2,3,4,5,6,7,8,9])
+      }
+    }
+  }
+
+  // do the wfc for all the items that the user has just inputted
+  for (let row = 0; row < 9; row++) {
+    for (let column = 0; column < 9; column++) {
+
+      // if the value was set by the user
+      if (typeof startingPossibilities[row][column] == 'number'){
+        startingPossibilities = updatePossibilities(row, column, startingPossibilities[row][column], startingPossibilities)
+      }
+    }
+  }
+  
+  // possibilities is a 3d array, containing the possibilities for each of the 81 squares. the third dimensions may be an...
+  // array => representing possibilities
+  // number => representing a final choice
+  // undefined => representing an improper collapse (no valid options)
+  const [possibilities, setPossibilities] = useState(startingPossibilities)
+
   function getBoard() {
 
     // board is an array of coords
@@ -101,7 +126,7 @@ export default function Board(props) {
     }
 
     return (
-      <>
+      <div id='board'>
         {board.map((row, key) =>
           <>
             <div className='row' key={key}>
@@ -115,7 +140,7 @@ export default function Board(props) {
             {(key + 1) % 3 === 0 ? key !== 8 ? <div className='horizontalBar'></div> : null : null}
           </>
         )}
-      </>
+      </div>
     )
   }
 

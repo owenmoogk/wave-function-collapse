@@ -48,3 +48,44 @@
   text-align: center;
   font-size: 25px;
 }
+
+.inputBoard{
+  display: flex;
+  flex-direction: column;
+}
+
+.numberInput{
+  width: 50px;
+  height: 50px;
+}
+
+.inputRow{
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+}
+
+.inputVerticalBar{
+  height: 52px;
+  width: 2px;
+  background-color: black;
+}
+
+.inputHorizontalBar{
+  width: 100%;
+  height: 2px;
+  background-color: black;
+}
+
+input{
+  font-size: 20px;
+  text-align: center;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; 
+}
