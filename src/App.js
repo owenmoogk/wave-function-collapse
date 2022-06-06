@@ -27,11 +27,7 @@ function App() {
     <div className="App">
       Enter a Sudoku:
       <Entrance enterBoard={enterBoard} />
-      {showBoard
-        ? <Board entranceValues={entranceValues} />
-        : null
-      }
-
+      <Board entranceValues={entranceValues} showBoard={showBoard}/>
     </div>
   );
 }

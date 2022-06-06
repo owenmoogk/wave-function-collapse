@@ -1,45 +1,47 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './board.css'
 import Cell from './Cell'
 
 export default function Board(props) {
 
-  function cellClicked(row, col, chosenNumber){
+  const [possibilities, setPossibilities] = useState()
+
+  function cellClicked(row, col, chosenNumber) {
 
     let tmpPossibilities = JSON.parse(JSON.stringify(possibilities))
     tmpPossibilities[row][col] = chosenNumber
-    
+
     tmpPossibilities = updatePossibilities(row, col, chosenNumber, tmpPossibilities)
 
     setPossibilities(tmpPossibilities)
-    
+
   }
 
-  function updatePossibilities(row, col, chosenNumber, tmpPossibilities){
+  function updatePossibilities(row, col, chosenNumber, tmpPossibilities) {
     // update the rows
-    for (let i = 0; i < 9; i++){
-      if (i != col){
+    for (let i = 0; i < 9; i++) {
+      if (i != col) {
         tmpPossibilities = updateCell(row, i, chosenNumber, tmpPossibilities)
       }
     }
 
     // update the columns
-    for (let i = 0; i < 9; i++){
-      if (i != row){
+    for (let i = 0; i < 9; i++) {
+      if (i != row) {
         tmpPossibilities = updateCell(i, col, chosenNumber, tmpPossibilities)
       }
     }
 
     // update the boxes
-    for (let i = row-2; i <= row + 2; i++){
+    for (let i = row - 2; i <= row + 2; i++) {
 
       // if it is in the same row of boxes
-      if ((Math.floor(i/3) == Math.floor(row/3)) && i != row){
+      if ((Math.floor(i / 3) == Math.floor(row / 3)) && i != row) {
 
-        for (let j = col-2; j <= col + 2; j++){
+        for (let j = col - 2; j <= col + 2; j++) {
 
           // if it is the same column of boxes
-          if ((Math.floor(j/3) == Math.floor(col/3)) && col != j){
+          if ((Math.floor(j / 3) == Math.floor(col / 3)) && col != j) {
             tmpPossibilities = updateCell(i, j, chosenNumber, tmpPossibilities)
           }
         }
@@ -49,30 +51,30 @@ export default function Board(props) {
     return tmpPossibilities
   }
 
-  function updateCell(row, col, chosenNumber, tmpPossibilities){
+  function updateCell(row, col, chosenNumber, tmpPossibilities) {
 
-    if (Array.isArray(tmpPossibilities[row][col])){
+    if (Array.isArray(tmpPossibilities[row][col])) {
       tmpPossibilities[row][col] = tmpPossibilities[row][col].filter((value, index, arr) => value != chosenNumber)
     }
-    else if (tmpPossibilities[row][col] == chosenNumber){
+    else if (tmpPossibilities[row][col] == chosenNumber) {
       tmpPossibilities[row][col] = undefined
     }
 
-    if (Array.isArray(tmpPossibilities[row][col]) && tmpPossibilities[row][col].length == 1){
+    if (Array.isArray(tmpPossibilities[row][col]) && tmpPossibilities[row][col].length == 1) {
 
       // change it into a final form (of an integer)
       tmpPossibilities[row][col] = tmpPossibilities[row][col][0]
 
       // update the rows
-      for (let i = 0; i < 9; i++){
-        if (i != col){
+      for (let i = 0; i < 9; i++) {
+        if (i != col) {
           updateCell(row, i, tmpPossibilities[row][col], tmpPossibilities)
         }
       }
 
       // update the columns
-      for (let i = 0; i < 9; i++){
-        if (i != row){
+      for (let i = 0; i < 9; i++) {
+        if (i != row) {
           updateCell(i, col, tmpPossibilities[row][col], tmpPossibilities)
         }
       }
@@ -80,38 +82,36 @@ export default function Board(props) {
     return tmpPossibilities
   }
 
-  let startingPossibilities = []
-  for (let row = 0; row < 9; row++) {
-    startingPossibilities.push([])
-    for (let column = 0; column < 9; column++) {
+  function initStartingValues() {
+    let startingPossibilities = []
+    for (let row = 0; row < 9; row++) {
+      startingPossibilities.push([])
+      for (let column = 0; column < 9; column++) {
 
-      // if the value was set by the user
-      if (props.entranceValues[row][column]){
-        startingPossibilities[row].push(parseInt(props.entranceValues[row][column]))
-      }
-      // if the value was not set, then set all possibilities
-      else{
-        startingPossibilities[row].push([1,2,3,4,5,6,7,8,9])
-      }
-    }
-  }
-
-  // do the wfc for all the items that the user has just inputted
-  for (let row = 0; row < 9; row++) {
-    for (let column = 0; column < 9; column++) {
-
-      // if the value was set by the user
-      if (typeof startingPossibilities[row][column] == 'number'){
-        startingPossibilities = updatePossibilities(row, column, startingPossibilities[row][column], startingPossibilities)
+        // if the value was set by the user
+        if (props.entranceValues[row][column]) {
+          startingPossibilities[row].push(parseInt(props.entranceValues[row][column]))
+        }
+        // if the value was not set, then set all possibilities
+        else {
+          startingPossibilities[row].push([1, 2, 3, 4, 5, 6, 7, 8, 9])
+        }
       }
     }
+
+    // do the wfc for all the items that the user has just inputted
+    for (let row = 0; row < 9; row++) {
+      for (let column = 0; column < 9; column++) {
+
+        // if the value was set by the user
+        if (typeof startingPossibilities[row][column] == 'number') {
+          startingPossibilities = updatePossibilities(row, column, startingPossibilities[row][column], startingPossibilities)
+        }
+      }
+    }
+
+    return startingPossibilities
   }
-  
-  // possibilities is a 3d array, containing the possibilities for each of the 81 squares. the third dimensions may be an...
-  // array => representing possibilities
-  // number => representing a final choice
-  // undefined => representing an improper collapse (no valid options)
-  const [possibilities, setPossibilities] = useState(startingPossibilities)
 
   function getBoard() {
 
@@ -144,9 +144,24 @@ export default function Board(props) {
     )
   }
 
+  useEffect(() => {
+    if (props.entranceValues && props.showBoard) {
+      setPossibilities(initStartingValues())
+    }
+  }, [props.entranceValues])
+
+  // possibilities is a 3d array, containing the possibilities for each of the 81 squares. the third dimensions may be an...
+  // array => representing possibilities
+  // number => representing a final choice
+  // undefined => representing an improper collapse (no valid options)
+
+
   return (
     <div className='board'>
-      {getBoard()}
+      {possibilities
+        ? getBoard()
+        : null
+      }
     </div>
   )
 }
