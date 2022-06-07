@@ -15,7 +15,7 @@ function App() {
     for (let row = 0; row < 9; row++) {
       values.push([])
       for (let column = 0; column < 9; column++) {
-        values[row].push(document.querySelector('[row=\"' + row + '\"][column=\"' + column + '\"]').value)
+        values[row].push(document.querySelector('[row="' + row + '"][column="' + column + '"]').value)
       }
     }
 

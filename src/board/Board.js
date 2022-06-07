@@ -20,14 +20,14 @@ export default function Board(props) {
 
     // update the rows
     for (let i = 0; i < 9; i++) {
-      if (i != col) {
+      if (i !== col) {
         tmpPossibilities = updateCell(row, i, chosenNumber, tmpPossibilities)
       }
     }
 
     // update the columns
     for (let i = 0; i < 9; i++) {
-      if (i != row) {
+      if (i !== row) {
         tmpPossibilities = updateCell(i, col, chosenNumber, tmpPossibilities)
       }
     }
@@ -36,12 +36,12 @@ export default function Board(props) {
     for (let i = row - 2; i <= row + 2; i++) {
 
       // if it is in the same row of boxes
-      if ((Math.floor(i / 3) == Math.floor(row / 3)) && i != row) {
+      if ((Math.floor(i / 3) === Math.floor(row / 3)) && i !== row) {
 
         for (let j = col - 2; j <= col + 2; j++) {
 
           // if it is the same column of boxes
-          if ((Math.floor(j / 3) == Math.floor(col / 3)) && col != j) {
+          if ((Math.floor(j / 3) === Math.floor(col / 3)) && col !== j) {
             tmpPossibilities = updateCell(i, j, chosenNumber, tmpPossibilities)
           }
         }
@@ -59,9 +59,9 @@ export default function Board(props) {
   function updateCell(row, col, chosenNumber, tmpPossibilities) {
 
     if (Array.isArray(tmpPossibilities[row][col])) {
-      tmpPossibilities[row][col] = tmpPossibilities[row][col].filter((value, index, arr) => value != chosenNumber)
+      tmpPossibilities[row][col] = tmpPossibilities[row][col].filter((value, index, arr) => value !== chosenNumber)
     }
-    else if (tmpPossibilities[row][col] == chosenNumber) {
+    else if (tmpPossibilities[row][col] === chosenNumber) {
       tmpPossibilities[row][col] = undefined
     }
     
