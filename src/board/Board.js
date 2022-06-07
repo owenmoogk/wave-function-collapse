@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react'
 import './board.css'
 import Cell from './Cell'
+import cloneDeep from 'lodash/cloneDeep'
 
 export default function Board(props) {
 
   const [possibilities, setPossibilities] = useState()
+  const [changes, setChanges] = useState()
+  const [locked, setLocked] = useState(false)
 
-  function cellClicked(row, col, chosenNumber) {
-
+  function cellClicked(row, col, chosenNumber){
     let tmpPossibilities = JSON.parse(JSON.stringify(possibilities))
-    tmpPossibilities[row][col] = chosenNumber
-
-    tmpPossibilities = updatePossibilities(row, col, chosenNumber, tmpPossibilities)
-
-    setPossibilities(tmpPossibilities)
-
+    propagate(row, col, chosenNumber, tmpPossibilities)
   }
 
-  function updatePossibilities(row, col, chosenNumber, tmpPossibilities) {
+  function propagate(row, col, chosenNumber, tmpPossibilities, setState = true) {
+    
+    tmpPossibilities[row][col] = chosenNumber
+
     // update the rows
     for (let i = 0; i < 9; i++) {
       if (i != col) {
@@ -48,7 +48,12 @@ export default function Board(props) {
       }
     }
 
-    return tmpPossibilities
+    if (setState){
+      setPossibilities(tmpPossibilities)
+    }
+    else{
+      return(tmpPossibilities)
+    }
   }
 
   function updateCell(row, col, chosenNumber, tmpPossibilities) {
@@ -59,25 +64,9 @@ export default function Board(props) {
     else if (tmpPossibilities[row][col] == chosenNumber) {
       tmpPossibilities[row][col] = undefined
     }
-
-    if (Array.isArray(tmpPossibilities[row][col]) && tmpPossibilities[row][col].length == 1) {
-
-      // change it into a final form (of an integer)
-      tmpPossibilities[row][col] = tmpPossibilities[row][col][0]
-
-      // update the rows
-      for (let i = 0; i < 9; i++) {
-        if (i != col) {
-          updateCell(row, i, tmpPossibilities[row][col], tmpPossibilities)
-        }
-      }
-
-      // update the columns
-      for (let i = 0; i < 9; i++) {
-        if (i != row) {
-          updateCell(i, col, tmpPossibilities[row][col], tmpPossibilities)
-        }
-      }
+    
+    if (Array.isArray(tmpPossibilities[row][col]) && tmpPossibilities[row][col].length === 1) {
+      propagate(row, col, tmpPossibilities[row][col][0], tmpPossibilities)
     }
     return tmpPossibilities
   }
@@ -104,8 +93,8 @@ export default function Board(props) {
       for (let column = 0; column < 9; column++) {
 
         // if the value was set by the user
-        if (typeof startingPossibilities[row][column] == 'number') {
-          startingPossibilities = updatePossibilities(row, column, startingPossibilities[row][column], startingPossibilities)
+        if (typeof startingPossibilities[row][column] === 'number') {
+          startingPossibilities = propagate(row, column, startingPossibilities[row][column], startingPossibilities, false)
         }
       }
     }
