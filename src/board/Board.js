@@ -11,21 +11,21 @@ export default function Board(props) {
     propagate(row, col, chosenNumber, tmpPossibilities)
   }
 
-  function propagate(row, col, chosenNumber, tmpPossibilities, setState = true) {
+  function propagate(row, col, chosenNumber, tmpPossibilities, time = 0) {
     
     tmpPossibilities[row][col] = chosenNumber
 
     // update the rows
     for (let i = 0; i < 9; i++) {
       if (i !== col) {
-        tmpPossibilities = updateCell(row, i, chosenNumber, tmpPossibilities)
+        tmpPossibilities = updateCell(row, i, chosenNumber, tmpPossibilities, time)
       }
     }
 
     // update the columns
     for (let i = 0; i < 9; i++) {
       if (i !== row) {
-        tmpPossibilities = updateCell(i, col, chosenNumber, tmpPossibilities)
+        tmpPossibilities = updateCell(i, col, chosenNumber, tmpPossibilities, time)
       }
     }
 
@@ -39,16 +39,21 @@ export default function Board(props) {
 
           // if it is the same column of boxes
           if ((Math.floor(j / 3) === Math.floor(col / 3)) && col !== j) {
-            tmpPossibilities = updateCell(i, j, chosenNumber, tmpPossibilities)
+            tmpPossibilities = updateCell(i, j, chosenNumber, tmpPossibilities, time)
           }
         }
       }
     }
 
+    console.log(time)
+    setTimeout(() => {
+      setPossibilities(tmpPossibilities)
+    }, time)
+
     return(tmpPossibilities)
   }
 
-  function updateCell(row, col, chosenNumber, tmpPossibilities) {
+  function updateCell(row, col, chosenNumber, tmpPossibilities, time) {
 
     if (Array.isArray(tmpPossibilities[row][col])) {
       tmpPossibilities[row][col] = tmpPossibilities[row][col].filter((value, index, arr) => value !== chosenNumber)
@@ -58,9 +63,10 @@ export default function Board(props) {
     }
     
     if (Array.isArray(tmpPossibilities[row][col]) && tmpPossibilities[row][col].length === 1) {
-      propagate(row, col, tmpPossibilities[row][col][0], tmpPossibilities)
+      var tmpArray = JSON.parse(JSON.stringify(tmpPossibilities))
+      propagate(row, col, tmpPossibilities[row][col][0], tmpArray, time+1000)
     }
-    setPossibilities(tmpPossibilities)
+
     return tmpPossibilities
   }
 
