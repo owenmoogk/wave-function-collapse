@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react'
 import './board.css'
 import Cell from './Cell'
-import cloneDeep from 'lodash/cloneDeep'
 
 export default function Board(props) {
 
   const [possibilities, setPossibilities] = useState()
-  const [changes, setChanges] = useState()
-  const [locked, setLocked] = useState(false)
 
   function cellClicked(row, col, chosenNumber){
     let tmpPossibilities = JSON.parse(JSON.stringify(possibilities))
@@ -48,12 +45,7 @@ export default function Board(props) {
       }
     }
 
-    if (setState){
-      setPossibilities(tmpPossibilities)
-    }
-    else{
-      return(tmpPossibilities)
-    }
+    return(tmpPossibilities)
   }
 
   function updateCell(row, col, chosenNumber, tmpPossibilities) {
@@ -68,6 +60,7 @@ export default function Board(props) {
     if (Array.isArray(tmpPossibilities[row][col]) && tmpPossibilities[row][col].length === 1) {
       propagate(row, col, tmpPossibilities[row][col][0], tmpPossibilities)
     }
+    setPossibilities(tmpPossibilities)
     return tmpPossibilities
   }
 
