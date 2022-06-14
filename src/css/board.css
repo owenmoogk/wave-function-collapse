@@ -1,0 +1,49 @@
+#board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100vh, 100vw, 550px);
+  height: min(100vh, 100vw, 550px);
+}
+#board .row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 11%;
+}
+#board .cell {
+  flex: 1;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-self: center;
+  overflow: hidden;
+}
+#board .broken {
+  color: red;
+  background: pink;
+  font-weight: bold;
+}
+#board .verticalBar {
+  height: 100%;
+  width: 2px;
+  background-color: black;
+}
+#board .horizontalBar {
+  width: 100%;
+  height: 2px;
+  background-color: black;
+}
+#board .possibility {
+  flex: 0 0 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#board .finalNumber {
+  flex: 0 0 100%;
+  text-align: center;
+  font-size: 25px;
+}

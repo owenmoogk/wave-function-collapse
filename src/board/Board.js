@@ -11,21 +11,25 @@ export default function Board(props) {
     propagate(row, col, chosenNumber, tmpPossibilities)
   }
 
-  function propagate(row, col, chosenNumber, tmpPossibilities, time = 0) {
+  function propagate(row, col, chosenNumber, tmpPossibilities, depth = 0) {
     
     tmpPossibilities[row][col] = chosenNumber
+    let tmpPropagateData;
+    let propagateData = []
 
     // update the rows
     for (let i = 0; i < 9; i++) {
       if (i !== col) {
-        tmpPossibilities = updateCell(row, i, chosenNumber, tmpPossibilities, time)
+        [tmpPossibilities, tmpPropagateData] = updateCell(row, i, chosenNumber, tmpPossibilities, depth)
+        propagateData.push(tmpPropagateData)
       }
     }
 
     // update the columns
     for (let i = 0; i < 9; i++) {
       if (i !== row) {
-        tmpPossibilities = updateCell(i, col, chosenNumber, tmpPossibilities, time)
+        [tmpPossibilities, tmpPropagateData] = updateCell(i, col, chosenNumber, tmpPossibilities, depth)
+        propagateData.push(tmpPropagateData)
       }
     }
 
@@ -39,21 +43,32 @@ export default function Board(props) {
 
           // if it is the same column of boxes
           if ((Math.floor(j / 3) === Math.floor(col / 3)) && col !== j) {
-            tmpPossibilities = updateCell(i, j, chosenNumber, tmpPossibilities, time)
+            [tmpPossibilities, tmpPropagateData] = updateCell(i, j, chosenNumber, tmpPossibilities, depth)
+            propagateData.push(tmpPropagateData)
           }
         }
       }
     }
 
-    console.log(time)
+    console.log(depth)
+    let austinWang = JSON.parse(JSON.stringify((tmpPossibilities)))
     setTimeout(() => {
-      setPossibilities(tmpPossibilities)
-    }, time)
+      setPossibilities(austinWang)
+    }, depth * 1000)
+
+    // further propagate that who needs it
+    for (let i = 0; i < propagateData.length; i++){
+      if (Object.keys(propagateData[i]).length !== 0){
+        propagate(propagateData[i]['row'], propagateData[i]['col'], propagateData[i]['number'], tmpPossibilities, depth + 1)
+      }
+    }
 
     return(tmpPossibilities)
   }
 
-  function updateCell(row, col, chosenNumber, tmpPossibilities, time) {
+  function updateCell(row, col, chosenNumber, tmpPossibilities, depth) {
+
+    let propagateData = {}
 
     if (Array.isArray(tmpPossibilities[row][col])) {
       tmpPossibilities[row][col] = tmpPossibilities[row][col].filter((value, index, arr) => value !== chosenNumber)
@@ -63,11 +78,14 @@ export default function Board(props) {
     }
     
     if (Array.isArray(tmpPossibilities[row][col]) && tmpPossibilities[row][col].length === 1) {
-      var tmpArray = JSON.parse(JSON.stringify(tmpPossibilities))
-      propagate(row, col, tmpPossibilities[row][col][0], tmpArray, time+1000)
+      propagateData = {
+        row: row,
+        col: col,
+        number: tmpPossibilities[row][col][0]
+      }
     }
 
-    return tmpPossibilities
+    return [tmpPossibilities, propagateData]
   }
 
   function initStartingValues() {
