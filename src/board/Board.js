@@ -51,9 +51,9 @@ export default function Board(props) {
     }
 
     console.log(depth)
-    let austinWang = JSON.parse(JSON.stringify((tmpPossibilities)))
+    let futurePossibilities = JSON.parse(JSON.stringify((tmpPossibilities)))
     setTimeout(() => {
-      setPossibilities(austinWang)
+      setPossibilities(futurePossibilities)
     }, depth * 1000)
 
     // further propagate that who needs it
