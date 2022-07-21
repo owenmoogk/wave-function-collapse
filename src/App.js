@@ -25,9 +25,12 @@ function App() {
 
   return (
     <div className="App">
-      Enter a Sudoku:
-      <Entrance enterBoard={enterBoard} />
-      <Board entranceValues={entranceValues} showBoard={showBoard}/>
+      <div className="splitScreen">
+        <Entrance enterBoard={enterBoard} />
+      </div>
+      <div className="splitScreen">
+        <Board entranceValues={entranceValues} showBoard={showBoard} />
+      </div>
     </div>
   );
 }

@@ -14,6 +14,7 @@ export default function Entrance(props){
 
     return (
       <div className="inputBoard">
+        <p>Enter a Sudoku:</p>
         {board.map((row, key) =>
           <>
             <div className='inputRow' key={key}>
@@ -34,15 +35,13 @@ export default function Entrance(props){
             {(key + 1) % 3 === 0 ? key !== 8 ? <div className='inputHorizontalBar'></div> : null : null}
           </>
         )}
+        <button onClick={() => props.enterBoard()}>Enter Board</button>
       </div>
     )
   }
 
   return(
-    <>
-      {getBoard()}
-      <button onClick={() => props.enterBoard()}>Enter Board</button>
-    </>
+    getBoard()
   )
 
 }

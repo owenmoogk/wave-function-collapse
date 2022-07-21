@@ -4,6 +4,26 @@
   flex-direction: column;
   align-items: center;
   width: fit-content;
+  height: fit-content;
+}
+
+p{
+  text-align: center;
+}
+
+#root{
+  height: fit-content;
+}
+.App{
+  display: flex;
+  flex-direction: row;
+  height: fit-content;
+}
+
+.splitScreen{
+  width: 50%;
+  display: flex;
+  height: fit-content;
 }
 
 .row{
@@ -88,4 +108,9 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none; 
+}
+
+button{
+  margin: 30px auto;
+  width: fit-content;
 }
