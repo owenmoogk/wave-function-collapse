@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import './board.css'
 import Cell from './Cell'
 
 export default function Board(props) {

@@ -7,6 +7,23 @@
   height: fit-content;
 }
 
+body{
+  height: 100vh;
+  width: 100vw;
+}
+
+#root{
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.app{
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
 p{
   text-align: center;
 }
@@ -18,12 +35,13 @@ p{
   display: flex;
   flex-direction: row;
   height: fit-content;
+  justify-content: space-around;
+  height: 100%;
+  width: 100%;
 }
 
 .splitScreen{
-  width: 50%;
-  display: flex;
-  height: fit-content;
+  flex: 1;
 }
 
 .row{
