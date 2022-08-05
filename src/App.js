@@ -23,10 +23,117 @@ function App() {
     setShowBoard(true)
   }
 
+  function defaultBoard() {
+    let values = [
+      [
+        "",
+        "",
+        "5",
+        "",
+        "7",
+        "8",
+        "",
+        "",
+        "9"
+      ],
+      [
+        "",
+        "8",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "2",
+        "7",
+        "",
+        "",
+        "",
+        "",
+        "1",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "2",
+        "4",
+        "3"
+      ],
+      [
+        "1",
+        "9",
+        "",
+        "7",
+        "",
+        "",
+        "",
+        "",
+        "5"
+      ],
+      [
+        "",
+        "",
+        "",
+        "3",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "4",
+        "",
+        "",
+        "",
+        "1",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "8",
+        "",
+        "5",
+        "",
+        "",
+        "7"
+      ],
+      [
+        "3",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "9",
+        "",
+        ""
+      ]
+    ]
+
+    setEntranceValues(values)
+    setShowBoard(true)
+  }
+
   return (
     <div className="App">
       <div className="splitScreen">
-        <Entrance enterBoard={enterBoard} />
+        <Entrance enterBoard={enterBoard} defaultBoard={defaultBoard}/>
       </div>
       <div className="splitScreen">
         <Board entranceValues={entranceValues} showBoard={showBoard} />

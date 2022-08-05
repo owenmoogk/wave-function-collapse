@@ -36,6 +36,7 @@ export default function Entrance(props){
           </>
         )}
         <button onClick={() => props.enterBoard()}>Enter Board</button>
+        <button onClick={() => props.defaultBoard()}>Default Board</button>
       </div>
     )
   }
