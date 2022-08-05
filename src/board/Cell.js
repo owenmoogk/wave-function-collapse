@@ -4,7 +4,7 @@ export default function Cell(props) {
   let column = props.coords[1]
 
   return (
-    <div className='cell' row={row} column={column}>
+    <div className={props.possibilities ? 'cell' : 'cell broken'} row={row} column={column}>
       {Array.isArray(props.possibilities) ?
         [1,2,3,4,5,6,7,8,9].map((option) => {
           return(
@@ -18,7 +18,9 @@ export default function Cell(props) {
             }}>{option}</span>
           )
         })
-        : <span className="finalNumber">{props.possibilities}</span>
+        : props.possibilities
+          ? <span className="finalNumber">{props.possibilities}</span>
+          : <span className="finalNumber">!</span>
       }
     </div>
   )

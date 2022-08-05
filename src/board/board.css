@@ -43,6 +43,12 @@ p{
   justify-self: center;
 }
 
+.broken{
+  color: red;
+  background: pink;
+  font-weight: bold;
+}
+
 .verticalBar{
   height: 72px;
   width: 2px;
