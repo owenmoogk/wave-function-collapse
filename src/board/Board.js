@@ -52,7 +52,6 @@ export default function Board(props) {
           setPossibilities(newPossibilities)
         }, 500 * depth);
         [failed, depth] = solve(JSON.parse(JSON.stringify(newPossibilities)), depth + 1)
-        depth += 1
         if (failed){
           return [failed, depth]
         }
@@ -61,6 +60,7 @@ export default function Board(props) {
         setTimeout(() => {
           setPossibilities(newPossibilities)
         }, 500 * depth);
+        depth += 1
       }
     }
     return [false, depth]
