@@ -6,7 +6,7 @@ export default function Board(props) {
 
   const [possibilities, setPossibilities] = useState()
 
-  function solve(tmpPossibilities){
+  function solve(tmpPossibilities, depth = 0){
 
     // check if the board is solved
     function isBoardSolved(tmpPossibilities){
@@ -21,15 +21,17 @@ export default function Board(props) {
     }
 
     if (isBoardSolved(tmpPossibilities)){
-      setPossibilities(tmpPossibilities)
-      return true
+      console.log('solved')
+      setTimeout(() => {
+        setPossibilities(tmpPossibilities)
+      }, 500 * depth);
+      return [true, depth]
     }
 
     // get the coords with the lowest number of possibilities
     let lowestPossibilities = 10
     let coords = undefined
 
-    console.log(tmpPossibilities)
     for (let row = 0; row < 9; row++){
       for (let col = 0; col < 9; col++){
         if (Array.isArray(tmpPossibilities[row][col])){
@@ -45,12 +47,23 @@ export default function Board(props) {
     for (let i = 0; i < cellPossibilities.length; i++){
       let currentPossibility = cellPossibilities[i]
       let [newPossibilities, failed] = propagate(coords[0], coords[1], currentPossibility, JSON.parse(JSON.stringify(tmpPossibilities)))
-      setPossibilities(newPossibilities)
       if (!failed){
-        solve(JSON.parse(JSON.stringify(newPossibilities)))
+        setTimeout(() => {
+          setPossibilities(newPossibilities)
+        }, 500 * depth);
+        [failed, depth] = solve(JSON.parse(JSON.stringify(newPossibilities)), depth + 1)
+        depth += 1
+        if (failed){
+          return [failed, depth]
+        }
       }
-      return
+      else{
+        setTimeout(() => {
+          setPossibilities(newPossibilities)
+        }, 500 * depth);
+      }
     }
+    return [false, depth]
   }
 
   function propagate(row, col, chosenNumber, tmpPossibilities, depth = 0) {
@@ -116,7 +129,6 @@ export default function Board(props) {
     // if (depth == 0){
     //   setPossibilities(JSON.parse(JSON.stringify((tmpPossibilities))))
     // }
-    console.log(newPossibilities)
     return([newPossibilities, failed])
   }
 
