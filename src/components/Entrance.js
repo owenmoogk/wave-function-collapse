@@ -1,4 +1,4 @@
-export default function Entrance(props){
+export default function Entrance(props) {
 
   function getBoard() {
 
@@ -21,10 +21,10 @@ export default function Entrance(props){
               {row.map((coords, rowKey) =>
                 <>
                   <input row={coords[0]} column={coords[1]} className="numberInput" type='number' onChange={(e) => {
-                    if (e.target.value > 0 && e.target.value < 10 && Number.isInteger(parseFloat(e.target.value))){
+                    if (e.target.value > 0 && e.target.value < 10 && Number.isInteger(parseFloat(e.target.value))) {
                       e.target.value = parseInt(e.target.value)
                     }
-                    else{
+                    else {
                       e.target.value = ''
                     }
                   }} />
@@ -35,13 +35,15 @@ export default function Entrance(props){
             {(key + 1) % 3 === 0 ? key !== 8 ? <div className='inputHorizontalBar'></div> : null : null}
           </>
         )}
-        <button onClick={() => props.enterBoard()}>Enter Board</button>
-        <button onClick={() => props.defaultBoard()}>Default Board</button>
+        <div className="buttons">
+          <button onClick={() => props.defaultBoard()} className="btn btn-secondary">Default Board</button>
+          <button onClick={() => props.enterBoard()} className="btn btn-primary">Enter Board</button>
+        </div>
       </div>
     )
   }
 
-  return(
+  return (
     getBoard()
   )
 

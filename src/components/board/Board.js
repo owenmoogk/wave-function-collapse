@@ -4,22 +4,23 @@ import Cell from './Cell'
 export default function Board(props) {
 
   const [possibilities, setPossibilities] = useState()
+  const [locked, setLocked] = useState()
 
-  function solve(tmpPossibilities, depth = 0){
+  function solve(tmpPossibilities, depth = 0) {
 
     // check if the board is solved
-    function isBoardSolved(tmpPossibilities){
-      for (let row = 0; row < 9; row++){
-        for (let col = 0; col < 9; col++){
-          if (Array.isArray(tmpPossibilities[row][col])){
+    function isBoardSolved(tmpPossibilities) {
+      for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+          if (Array.isArray(tmpPossibilities[row][col])) {
             return false
           }
         }
-      } 
+      }
       return true
     }
 
-    if (isBoardSolved(tmpPossibilities)){
+    if (isBoardSolved(tmpPossibilities)) {
       console.log('solved')
       setTimeout(() => {
         setPossibilities(tmpPossibilities)
@@ -31,10 +32,10 @@ export default function Board(props) {
     let lowestPossibilities = 10
     let coords = undefined
 
-    for (let row = 0; row < 9; row++){
-      for (let col = 0; col < 9; col++){
-        if (Array.isArray(tmpPossibilities[row][col])){
-          if (tmpPossibilities[row][col].length < lowestPossibilities){
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        if (Array.isArray(tmpPossibilities[row][col])) {
+          if (tmpPossibilities[row][col].length < lowestPossibilities) {
             lowestPossibilities = tmpPossibilities[row][col].length
             coords = [row, col]
           }
@@ -43,19 +44,19 @@ export default function Board(props) {
     }
 
     let cellPossibilities = tmpPossibilities[coords[0]][coords[1]]
-    for (let i = 0; i < cellPossibilities.length; i++){
+    for (let i = 0; i < cellPossibilities.length; i++) {
       let currentPossibility = cellPossibilities[i]
       let [newPossibilities, failed] = propagate(coords[0], coords[1], currentPossibility, JSON.parse(JSON.stringify(tmpPossibilities)))
-      if (!failed){
+      if (!failed) {
         setTimeout(() => {
           setPossibilities(newPossibilities)
         }, 500 * depth);
         [failed, depth] = solve(JSON.parse(JSON.stringify(newPossibilities)), depth + 1)
-        if (failed){
+        if (failed) {
           return [failed, depth]
         }
       }
-      else{
+      else {
         setTimeout(() => {
           setPossibilities(newPossibilities)
         }, 500 * depth);
@@ -66,7 +67,7 @@ export default function Board(props) {
   }
 
   function propagate(row, col, chosenNumber, tmpPossibilities, depth = 0) {
-    
+
     tmpPossibilities[row][col] = chosenNumber
     let tmpPropagateData, tmpFailed;
     let propagateData = []
@@ -77,7 +78,7 @@ export default function Board(props) {
       if (i !== col) {
         [tmpPossibilities, tmpPropagateData, tmpFailed] = updateCell(row, i, chosenNumber, tmpPossibilities, depth)
         propagateData.push(tmpPropagateData)
-        if (tmpFailed){
+        if (tmpFailed) {
           failed = true
         }
       }
@@ -88,7 +89,7 @@ export default function Board(props) {
       if (i !== row) {
         [tmpPossibilities, tmpPropagateData, tmpFailed] = updateCell(i, col, chosenNumber, tmpPossibilities, depth)
         propagateData.push(tmpPropagateData)
-        if (tmpFailed){
+        if (tmpFailed) {
           failed = true
         }
       }
@@ -106,7 +107,7 @@ export default function Board(props) {
           if ((Math.floor(j / 3) === Math.floor(col / 3)) && col !== j) {
             [tmpPossibilities, tmpPropagateData, tmpFailed] = updateCell(i, j, chosenNumber, tmpPossibilities, depth)
             propagateData.push(tmpPropagateData)
-            if (tmpFailed){
+            if (tmpFailed) {
               failed = true
             }
           }
@@ -116,10 +117,10 @@ export default function Board(props) {
 
     // further propagate that who needs it
     let newPossibilities = JSON.parse(JSON.stringify(tmpPossibilities));
-    for (let i = 0; i < propagateData.length; i++){
-      if (Object.keys(propagateData[i]).length !== 0){
+    for (let i = 0; i < propagateData.length; i++) {
+      if (Object.keys(propagateData[i]).length !== 0) {
         [newPossibilities, tmpFailed] = propagate(propagateData[i]['row'], propagateData[i]['col'], propagateData[i]['number'], tmpPossibilities, depth + 1)
-        if (tmpFailed){
+        if (tmpFailed) {
           failed = true
         }
       }
@@ -128,7 +129,7 @@ export default function Board(props) {
     // if (depth == 0){
     //   setPossibilities(JSON.parse(JSON.stringify((tmpPossibilities))))
     // }
-    return([newPossibilities, failed])
+    return ([newPossibilities, failed])
   }
 
   function updateCell(row, col, chosenNumber, tmpPossibilities, depth) {
@@ -143,7 +144,7 @@ export default function Board(props) {
       tmpPossibilities[row][col] = undefined
       failed = true
     }
-    
+
     if (Array.isArray(tmpPossibilities[row][col]) && tmpPossibilities[row][col].length === 1) {
       propagateData = {
         row: row,
@@ -230,12 +231,15 @@ export default function Board(props) {
 
 
   return (
-    <div className='board'>
+    <>
       {possibilities
         ? getBoard()
         : null
       }
-      <button onClick={() => solve(JSON.parse(JSON.stringify(possibilities)))} id='solveButton'>Solve</button>
-    </div>
+      <div className='buttons'>
+        <button onClick={() => solve(JSON.parse(JSON.stringify(possibilities)))} id='solveButton'>Solve</button>
+        <button onClick={() => props.setShowEntrance(true)}>Enter Values</button>
+      </div>
+    </>
   )
 }
