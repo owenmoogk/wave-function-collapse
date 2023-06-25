@@ -232,14 +232,14 @@ export default function Board(props) {
 
   return (
     <>
-      {possibilities
-        ? getBoard()
-        : null
-      }
       <div className='buttons'>
         <button onClick={() => solve(JSON.parse(JSON.stringify(possibilities)))} id='solveButton'>Solve</button>
         <button onClick={() => props.setShowEntrance(true)}>Enter Values</button>
       </div>
+      {possibilities
+        ? getBoard()
+        : null
+      }
     </>
   )
 }
