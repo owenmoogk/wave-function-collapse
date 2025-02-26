@@ -29,7 +29,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Compile Less to CSS
-        run: npx less-watch-compiler src/less src main.less --run-once
+        run: npx less-watch-compiler src/less src/css --run-once
       
       - name: Build
         run: yarn build
