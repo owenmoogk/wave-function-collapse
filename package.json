@@ -3,24 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "dependencies": {
-    "@mantine/core": "^7.17.0",
-    "@mantine/hooks": "^7.17.0",
-    "@types/lodash": "^4.17.15",
-    "concurrently": "^9.1.2",
-    "eslint": "^9.21.0",
-    "eslint-import-resolver-typescript": "^3.8.3",
-    "lodash": "^4.17.21",
-    "postcss": "^8.5.3",
-    "postcss-preset-mantine": "^1.17.0",
-    "postcss-simple-vars": "^7.0.1",
-    "prettier": "^3.5.2",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "typescript": "^5.7.3",
-    "vite": "^6.2.0",
-    "web-vitals": "^4.2.4"
-  },
+  
   "scripts": {
     "start": "concurrently --kill-others \"less-watch-compiler src/less src/css\" \"vite\"",
     "build": "vite build",
@@ -46,7 +29,25 @@
       "last 1 safari version"
     ]
   },
+  "dependencies": {
+    "@mantine/core": "^7.17.0",
+    "@mantine/hooks": "^7.17.0",
+    "concurrently": "^9.1.2",
+    "lodash": "^4.17.21",
+    "postcss": "^8.5.3",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
+    "prettier": "^3.5.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.2.0"
+  },
   "devDependencies": {
+    "eslint": "^9.21.0",
+    "eslint-import-resolver-typescript": "^3.8.3",
+    "@types/lodash": "^4.17.15",
+    "@types/node": "^22.13.5",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@typescript-eslint/eslint-plugin": "^8.25.0",
