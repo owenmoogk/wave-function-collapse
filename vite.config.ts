@@ -20,5 +20,5 @@ export default defineConfig({
       '@solver': path.resolve(__dirname, './src/solver'),
     },
   },
-  base: '/os/',
+  base: '/wave-function-collapse/',
 });
