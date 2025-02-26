@@ -3,31 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  
   "scripts": {
     "start": "concurrently --kill-others \"less-watch-compiler src/less src/css\" \"vite\"",
     "build": "vite build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "dependencies": {
     "@mantine/core": "^7.17.0",
