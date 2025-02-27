@@ -1,108 +1,120 @@
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import tslint from "typescript-eslint"
-import prettier from "eslint-plugin-prettier";
-import tsParser from "@typescript-eslint/parser";
-import js from "@eslint/js";
-import reactPlugin from "eslint-plugin-react";
-import reactHooksPlugin from "eslint-plugin-react-hooks";
-import importPlugin from "eslint-plugin-import";
-import globals from "globals"
+/* eslint-disable import/no-unresolved */
+import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
+import typescriptEslint from 'typescript-eslint';
+import prettierPluginRecommended from 'eslint-plugin-prettier/recommended';
+import typescriptParser from '@typescript-eslint/parser';
+import js from '@eslint/js';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import importPlugin from 'eslint-plugin-import';
+import globals from 'globals';
 
 export default [
-    js.configs.recommended,
-    {
-        ignores: ["**/node_modules/", "**/build/", "**/dist/", "**/*d.ts"],
+  js.configs.recommended,
+  {
+    ...reactPlugin.configs.flat.recommended,
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
-    {
-        files: ["**/*.ts", "**/*.tsx"],
-        ...reactPlugin.configs.flat.recommended,
+  },
+  importPlugin.flatConfigs.recommended,
+  typescriptEslint.configs.eslintRecommended,
+  prettierPluginRecommended,
 
-        plugins: {
-            "@typescript-eslint": typescriptEslint,
-            prettier,
-            react: reactPlugin,
-            "react-hooks": reactHooksPlugin,
-            import: importPlugin,
-        },
+  // https://stackoverflow.com/questions/58510287/parseroptions-project-has-been-set-for-typescript-eslint-parser
+  ...typescriptEslint.configs.strictTypeChecked.map((config) => ({
+    ...config,
+    files: ['**/*.ts', '**/*.tsx'],
+  })),
 
+  {
+    ignores: ['**/node_modules/', '**/build/', '**/dist/', '**/*d.ts'],
+  },
 
-        languageOptions: {
-            parser: tsParser,
-            parserOptions: {
-                project: "./tsconfig.json",
-            },
-            globals: {
-                ...globals.browser,
-                __dirname: "readonly",
-            },
-        },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
 
-        settings: {
-            react: {
-                version: "detect",
-            },
-            "import/resolver": {
-                typescript: {
-                    alwaysTryTypes: true,
-                    project: "./tsconfig.json",
-                },
-            },
-        },
-
-        rules: {
-            // for some reason, these can't be applied at top level
-            ...tslint.configs.strictTypeChecked.rules,
-            ...reactHooksPlugin.configs.recommended.rules,
-            ...importPlugin.flatConfigs.recommended.rules,
-            ...reactPlugin.configs.flat.recommended.rules,
-            ...tslint.configs.eslintRecommended.rules,
-
-            "prettier/prettier": "error",
-
-            "@typescript-eslint/consistent-type-imports": "error",
-            "@typescript-eslint/member-ordering": "error",
-            "@typescript-eslint/no-floating-promises": "error",
-            "@typescript-eslint/no-implied-eval": "error",
-            "@typescript-eslint/promise-function-async": "error",
-            "@typescript-eslint/return-await": "error",
-            "@typescript-eslint/no-unnecessary-condition": "error",
-
-            "react/react-in-jsx-scope": "off",
-            "react/no-unescaped-entities": "off",
-            "react/jsx-closing-bracket-location": ["error", { location: "line-aligned" }],
-            "react/jsx-fragments": "error",
-            "react/jsx-no-useless-fragment": "error",
-            "react/jsx-pascal-case": ["error", { allowAllCaps: true, allowNamespace: true }],
-            "react/self-closing-comp": "error",
-
-            "react-hooks/exhaustive-deps": "error",
-            "react-hooks/rules-of-hooks": "error",
-
-            "import/order": [
-                "error",
-                {
-                    groups: [["builtin", "external"], ["internal", "sibling", "parent", "index", "object"]],
-                    pathGroups: [
-                        { pattern: "react", group: "builtin", position: "before" },
-                        { pattern: "**/*.json", group: "object", position: "after" },
-                    ],
-                    alphabetize: { order: "asc", caseInsensitive: true },
-                    "newlines-between": "always",
-                    warnOnUnassignedImports: true,
-                }
-            ],
-            "import/no-named-as-default": "error",
-
-            // General ESLint rules
-            "no-unused-vars": "off", // handled by tslint
-            "no-useless-return": "error",
-            "eqeqeq": "error",
-            "no-console": "warn",
-            "no-var": "error",
-            "prefer-const": "error",
-            "prefer-promise-reject-errors": "error",
-            "prefer-regex-literals": "error",
-            radix: "error",
-        },
+    plugins: {
+      '@typescript-eslint': typescriptEslintPlugin,
+      'react-hooks': reactHooksPlugin,
     },
+
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+      globals: {
+        ...globals.browser,
+        __dirname: 'readonly',
+      },
+    },
+
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
+      },
+    },
+
+    rules: {
+      // for some reason, these can't be applied at top level
+      ...reactHooksPlugin.configs.recommended.rules,
+      'react-hooks/exhaustive-deps': 'error',
+
+      // typescript eslint
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-confusing-void-expression': 'off',
+      '@typescript-eslint/member-ordering': 'error',
+      '@typescript-eslint/promise-function-async': 'error',
+
+      // react
+      'react/react-in-jsx-scope': 'off',
+      'react/no-unescaped-entities': 'off',
+      'react/jsx-closing-bracket-location': [
+        'error',
+        { location: 'line-aligned' },
+      ],
+      'react/jsx-fragments': 'error',
+      'react/jsx-no-useless-fragment': 'error',
+      'react/jsx-pascal-case': [
+        'error',
+        { allowAllCaps: true, allowNamespace: true },
+      ],
+      'react/self-closing-comp': 'error',
+
+      // import
+      'import/order': [
+        'error',
+        {
+          groups: [
+            ['builtin', 'external'],
+            ['internal', 'sibling', 'parent', 'index', 'object'],
+          ],
+          pathGroups: [
+            { pattern: 'react', group: 'builtin', position: 'before' },
+            { pattern: '**/*.json', group: 'object', position: 'after' },
+          ],
+          alphabetize: { order: 'asc', caseInsensitive: true },
+          'newlines-between': 'always',
+          warnOnUnassignedImports: true,
+        },
+      ],
+      'import/no-named-as-default': 'error',
+
+      // javascript
+      'no-useless-return': 'error',
+      eqeqeq: 'error',
+      'no-console': 'warn',
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'prefer-promise-reject-errors': 'error',
+      'prefer-regex-literals': 'error',
+      radix: 'error',
+    },
+  },
 ];

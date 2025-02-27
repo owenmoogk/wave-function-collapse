@@ -13,7 +13,7 @@ export default function Board(props: {
   const [possibilities, setPossibilities] = useState<PossibilitiesType>(
     initStartingValues(props.entranceValues)
   );
-  const timeDelay = 100;
+  const timeDelay = 500;
 
   function solve(
     tmpPossibilities: PossibilitiesType,
