@@ -1,4 +1,5 @@
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
+import tslint from "typescript-eslint"
 import prettier from "eslint-plugin-prettier";
 import tsParser from "@typescript-eslint/parser";
 import js from "@eslint/js";
@@ -14,6 +15,8 @@ export default [
     },
     {
         files: ["**/*.ts", "**/*.tsx"],
+        ...reactPlugin.configs.flat.recommended,
+
         plugins: {
             "@typescript-eslint": typescriptEslint,
             prettier,
@@ -21,6 +24,7 @@ export default [
             "react-hooks": reactHooksPlugin,
             import: importPlugin,
         },
+
 
         languageOptions: {
             parser: tsParser,
@@ -46,31 +50,34 @@ export default [
         },
 
         rules: {
+            // for some reason, these can't be applied at top level
+            ...tslint.configs.strictTypeChecked.rules,
+            ...reactHooksPlugin.configs.recommended.rules,
+            ...importPlugin.flatConfigs.recommended.rules,
+            ...reactPlugin.configs.flat.recommended.rules,
+            ...tslint.configs.eslintRecommended.rules,
+
             "prettier/prettier": "error",
 
             "@typescript-eslint/consistent-type-imports": "error",
             "@typescript-eslint/member-ordering": "error",
-            "@typescript-eslint/method-signature-style": "error",
             "@typescript-eslint/no-floating-promises": "error",
             "@typescript-eslint/no-implied-eval": "error",
             "@typescript-eslint/promise-function-async": "error",
             "@typescript-eslint/return-await": "error",
             "@typescript-eslint/no-unnecessary-condition": "error",
 
+            "react/react-in-jsx-scope": "off",
             "react/no-unescaped-entities": "off",
             "react/jsx-closing-bracket-location": ["error", { location: "line-aligned" }],
-            "react/jsx-first-prop-new-line": ["error", "multiline"],
             "react/jsx-fragments": "error",
             "react/jsx-no-useless-fragment": "error",
             "react/jsx-pascal-case": ["error", { allowAllCaps: true, allowNamespace: true }],
-            "react/jsx-props-no-multi-spaces": "error",
-            "react/jsx-tag-spacing": ["error", { beforeClosing: "never" }],
             "react/self-closing-comp": "error",
 
             "react-hooks/exhaustive-deps": "error",
             "react-hooks/rules-of-hooks": "error",
 
-            // Import rules
             "import/order": [
                 "error",
                 {
@@ -87,9 +94,9 @@ export default [
             "import/no-named-as-default": "error",
 
             // General ESLint rules
+            "no-unused-vars": "off", // handled by tslint
             "no-useless-return": "error",
             "eqeqeq": "error",
-            "no-unused-vars": "off", // https://github.com/eslint/eslint/issues/17039
             "no-console": "warn",
             "no-var": "error",
             "prefer-const": "error",
