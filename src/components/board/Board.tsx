@@ -1,5 +1,7 @@
+import { Button, Container, Flex, NumberInput } from '@mantine/core';
 import cloneDeep from 'lodash/cloneDeep';
 import { Fragment, useEffect, useState } from 'react';
+import { FaArrowLeft } from 'react-icons/fa';
 
 import Cell from './Cell';
 import type { BoardType, PossibilitiesType } from '../../types';
@@ -10,10 +12,11 @@ export default function Board(props: {
   showBoard: boolean;
   setShowEntrance: (showEntrance: boolean) => void;
 }) {
+  const defaultTimeStep = 200;
+  const [timeDelay, setTimeDelayMs] = useState(defaultTimeStep);
   const [possibilities, setPossibilities] = useState<PossibilitiesType>(
     initStartingValues(props.entranceValues)
   );
-  const timeDelay = 500;
 
   function solve(
     tmpPossibilities: PossibilitiesType,
@@ -125,19 +128,25 @@ export default function Board(props: {
   // undefined => representing an improper collapse (no valid options)
 
   return (
-    <>
-      <div className="buttons">
-        <button
-          onClick={() => solve(cloneDeep(possibilities))}
-          id="solveButton"
-        >
-          Solve
-        </button>
-        <button onClick={() => props.setShowEntrance(true)}>
-          Enter Values
-        </button>
-      </div>
+    <Container w={'fit-content'}>
+      <Flex justify={'space-between'} my={10} w={'100%'} align={'end'}>
+        <Button onClick={() => props.setShowEntrance(true)} variant="default">
+          <FaArrowLeft />
+        </Button>
+        <NumberInput
+          label={'Time Step (ms)'}
+          min={100}
+          max={2000}
+          placeholder="Step time (100-2000)"
+          onValueChange={(values) =>
+            setTimeDelayMs(values.floatValue ?? defaultTimeStep)
+          }
+          clampBehavior="blur"
+          defaultValue={defaultTimeStep}
+        />
+        <Button onClick={() => solve(cloneDeep(possibilities))}>Solve</Button>
+      </Flex>
       {getBoard()}
-    </>
+    </Container>
   );
 }

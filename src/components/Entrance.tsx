@@ -1,4 +1,4 @@
-import { NumberInput } from '@mantine/core';
+import { Button, Flex, NumberInput } from '@mantine/core';
 import { Fragment, useState } from 'react';
 
 import { emptyBoard, type BoardType } from '../types';
@@ -12,20 +12,7 @@ export default function Entrance(props: {
   return (
     <div className="inputBoard">
       <p>Enter a Sudoku:</p>
-      <div className="buttons">
-        <button
-          onClick={() => props.defaultBoard()}
-          className="btn btn-secondary"
-        >
-          Default Board
-        </button>
-        <button
-          onClick={() => props.enterBoard(board)}
-          className="btn btn-primary"
-        >
-          Enter Board
-        </button>
-      </div>
+
       {Array.from({ length: 9 }, (v, i) => i).map((rowNum) => (
         <Fragment key={rowNum}>
           <div className="inputRow" key={rowNum}>
@@ -62,6 +49,21 @@ export default function Entrance(props: {
           ) : null}
         </Fragment>
       ))}
+      <Flex justify={'space-between'} my={10}>
+        <Button
+          onClick={() => props.defaultBoard()}
+          className="btn"
+          variant="light"
+        >
+          Use Default Board
+        </Button>
+        <Button
+          onClick={() => props.enterBoard(board)}
+          className="btn btn-primary"
+        >
+          Enter Board
+        </Button>
+      </Flex>
     </div>
   );
 }

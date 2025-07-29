@@ -1,4 +1,4 @@
-import { Box, Modal } from '@mantine/core';
+import { Flex, Modal, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
@@ -32,13 +32,18 @@ function App() {
 
   return (
     <div className="App">
-      <Box className="navBar" id="header">
-        <p>Wave Function Collapse</p>
-        <div id="rightNav">
-          <a href="https://owenmoogk.github.io">Owen Moogk</a>
-          <FaInfoCircle onClick={() => open()} />
-        </div>
-      </Box>
+      <Title mt={20}>Wave Function Collapse</Title>
+      <Flex
+        pos={'absolute'}
+        bottom={10}
+        right={10}
+        gap={10}
+        justify={'center'}
+        align={'center'}
+      >
+        <a href="https://owenmoogk.github.io">Owen Moogk</a>
+        <FaInfoCircle onClick={() => open()} />
+      </Flex>
       {showEntrance ? (
         <Entrance enterBoard={enterBoard} defaultBoard={setDefaultBoard} />
       ) : (
@@ -48,10 +53,15 @@ function App() {
           setShowEntrance={setShowEntrance}
         />
       )}
-      <Modal opened={modalShown} onClose={close} title="Wave Function Collapse">
+      <Modal
+        opened={modalShown}
+        onClose={close}
+        title="Wave Function Collapse"
+        size={'lg'}
+      >
         <p>
           This website is designed with the intention of visualising the process
-          of a wave function collapse, to get to a desired result... but what
+          of a wave function collapse to get to a desired result... but what
           even is a wave function?
           <br />
           <br />
@@ -61,16 +71,20 @@ function App() {
           obey. In this case, it must obey the rules of a sudoku.
           <br />
           <br />
-          Then, we can systematically choose values that satisfy the rules
-          (known as 'collapsing' the wave function), and diverge upon a solution
-          (note that there may sometimes be error in the chosen values, which is
-          why backtracking is necessary).
+          Then, we can systematically choose values for each cell that satisfy
+          the rules (known as 'collapsing' the wave function), and converge upon
+          a solution. However, there may sometimes be error in the chosen
+          values, which is why backtracking is necessary (this is shown by red
+          cells with an "!").
           <br />
           <br />
-          Why is it powerful? It is much better than brute force, and is an
-          intelligent way to approach many problems. It's unique in that it does
-          not only solve problems with one solution. Applications of this
-          include{' '}
+          Why is it powerful? It is much faster than brute force, and is an
+          intelligent way to approach many problems where constraints propagate.
+          It's unique in that it does not only solve problems with one solution
+          (you can submit an empty board and see what happens as an example).
+          <br />
+          <br />
+          Applications of this include{' '}
           <a href="https://bolddunkley.itch.io/wfc-mixed">
             terrain generation for video games
           </a>
