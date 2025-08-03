@@ -21,7 +21,7 @@ export default function Board(props: {
   function solve(
     tmpPossibilities: PossibilitiesType,
     depth = 0
-  ): [boolean, depth: number] {
+  ): [isSolved: boolean, depth: number] {
     // base case, is board solved
     if (isBoardSolved(tmpPossibilities)) {
       setTimeout(() => {
@@ -48,7 +48,7 @@ export default function Board(props: {
       }
     }
 
-    // this wasn't here
+    // typechecking only, this should always be defined
     if (coordsToPropagate === undefined) {
       return [false, depth];
     }
@@ -67,18 +67,21 @@ export default function Board(props: {
         cloneDeep(tmpPossibilities)
       );
       if (!failed) {
-        setTimeout(() => {
-          setPossibilities(newPossibilities);
-        }, timeDelay * depth);
-        [failed, depth] = solve(cloneDeep(newPossibilities), depth + 1);
-        if (failed) {
-          return [failed, depth];
+        setTimeout(() => setPossibilities(newPossibilities), timeDelay * depth);
+        let isSolved: boolean;
+        [isSolved, depth] = solve(cloneDeep(newPossibilities), depth + 1);
+        if (isSolved) {
+          return [true, depth];
         }
       } else {
         setTimeout(() => {
           setPossibilities(newPossibilities);
         }, timeDelay * depth);
-        depth += 1;
+        setTimeout(
+          () => setPossibilities(tmpPossibilities),
+          timeDelay * (depth + 1)
+        );
+        depth += 2;
       }
     }
     return [false, depth];
