@@ -7,21 +7,31 @@ import Cell from './Cell';
 import type { BoardType, PossibilitiesType } from '../../types';
 import { initStartingValues, isBoardSolved, propagate } from '@solver/solver';
 
-export default function Board(props: {
+type Props = {
   entranceValues: BoardType;
   showBoard: boolean;
   setShowEntrance: (showEntrance: boolean) => void;
-}) {
+  setEntranceValues: (values: BoardType) => void;
+};
+
+export default function Board({
+  entranceValues,
+  showBoard,
+  setShowEntrance,
+  setEntranceValues,
+}: Props) {
   const defaultTimeStep = 200;
   const [timeDelay, setTimeDelayMs] = useState(defaultTimeStep);
   const [possibilities, setPossibilities] = useState<PossibilitiesType>(
-    initStartingValues(props.entranceValues)
+    initStartingValues(entranceValues)
   );
+  const [locked, setLocked] = useState(false);
 
   function solve(
     tmpPossibilities: PossibilitiesType,
     depth = 0
   ): [isSolved: boolean, depth: number] {
+    setLocked(true);
     // base case, is board solved
     if (isBoardSolved(tmpPossibilities)) {
       setTimeout(() => {
@@ -71,6 +81,7 @@ export default function Board(props: {
         let isSolved: boolean;
         [isSolved, depth] = solve(cloneDeep(newPossibilities), depth + 1);
         if (isSolved) {
+          setTimeout(() => setLocked(false), timeDelay * depth + 2);
           return [true, depth];
         }
       } else {
@@ -87,6 +98,14 @@ export default function Board(props: {
     return [false, depth];
   }
 
+  function cellClicked(row: number, col: number, selection: number) {
+    if (!locked) {
+      const entranceClone = cloneDeep(entranceValues);
+      entranceClone[row][col] = selection;
+      setEntranceValues(entranceClone);
+    }
+  }
+
   function getBoard() {
     return (
       <div id="board">
@@ -94,19 +113,21 @@ export default function Board(props: {
           <Fragment key={row}>
             <div className="row">
               {Array.from({ length: 9 }).map((_, col) => (
-                <>
+                <Fragment key={col}>
                   <Cell
+                    locked={locked}
                     row={row}
                     column={col}
                     key={col}
                     possibilities={possibilities[row][col]}
+                    cellClicked={cellClicked}
                   />
                   {(col + 1) % 3 === 0 ? (
                     col !== 8 ? (
                       <div className="verticalBar" />
                     ) : null
                   ) : null}
-                </>
+                </Fragment>
               ))}
             </div>
             {(row + 1) % 3 === 0 ? (
@@ -121,23 +142,23 @@ export default function Board(props: {
   }
 
   useEffect(() => {
-    if (props.showBoard) {
-      setPossibilities(initStartingValues(props.entranceValues));
+    if (showBoard) {
+      setPossibilities(initStartingValues(entranceValues));
     }
-  }, [props.entranceValues, props.showBoard]);
+  }, [entranceValues, showBoard]);
 
   // possibilities is a 3d array, containing the possibilities for each of the 81 squares. the third dimensions may be an...
   // array => representing possibilities
   // undefined => representing an improper collapse (no valid options)
 
   return (
-    <Container w={'fit-content'}>
-      <Flex justify={'space-between'} my={10} w={'100%'} align={'end'}>
-        <Button onClick={() => props.setShowEntrance(true)} variant="default">
+    <Container w="fit-content">
+      <Flex justify="space-between" my={10} w="100%" align="end">
+        <Button onClick={() => setShowEntrance(true)} variant="default">
           <FaArrowLeft />
         </Button>
         <NumberInput
-          label={'Time Step (ms)'}
+          label="Time Step (ms)"
           min={100}
           max={2000}
           placeholder="Step time (100-2000)"

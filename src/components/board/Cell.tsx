@@ -4,6 +4,8 @@ export default function Cell(props: {
   row: number;
   column: number;
   possibilities?: number[];
+  cellClicked: (row: number, col: number, selection: number) => void;
+  locked: boolean;
 }) {
   return (
     <div className={props.possibilities ? 'cell' : 'cell broken'}>
@@ -11,8 +13,8 @@ export default function Cell(props: {
         Array.from({ length: 9 }, (v, i) => i + 1).map((option, key) => {
           return (
             <Box
-              h={'33%'}
-              w={'33%'}
+              h="33%"
+              w="33%"
               key={key}
               className="possibility"
               style={{
@@ -24,7 +26,9 @@ export default function Cell(props: {
                   ? ''
                   : 'scale(2)',
                 zIndex: props.possibilities?.includes(option) ? '' : '-1',
+                cursor: !props.locked ? 'pointer' : 'default',
               }}
+              onClick={() => props.cellClicked(props.row, props.column, option)}
             >
               {option}
             </Box>

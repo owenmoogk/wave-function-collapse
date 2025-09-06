@@ -79,6 +79,13 @@ export default [
         'error',
         { location: 'line-aligned' },
       ],
+      'react/jsx-curly-brace-presence': [
+        'error',
+        {
+          props: 'never',
+          children: 'never',
+        },
+      ],
       'react/jsx-fragments': 'error',
       'react/jsx-no-useless-fragment': 'error',
       'react/jsx-pascal-case': [
@@ -87,29 +94,12 @@ export default [
       ],
       'react/self-closing-comp': 'error',
 
-      // import
-      'import/order': [
-        'error',
-        {
-          groups: [
-            ['builtin', 'external'],
-            ['internal', 'sibling', 'parent', 'index', 'object'],
-          ],
-          pathGroups: [
-            { pattern: 'react', group: 'builtin', position: 'before' },
-            { pattern: '**/*.json', group: 'object', position: 'after' },
-          ],
-          alphabetize: { order: 'asc', caseInsensitive: true },
-          'newlines-between': 'always',
-          warnOnUnassignedImports: true,
-        },
-      ],
       'import/no-named-as-default': 'error',
 
       // javascript
       'no-useless-return': 'error',
       eqeqeq: 'error',
-      'no-console': 'warn',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-var': 'error',
       'prefer-const': 'error',
       'prefer-promise-reject-errors': 'error',

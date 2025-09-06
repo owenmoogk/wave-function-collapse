@@ -49,7 +49,7 @@ export default function Entrance(props: {
           ) : null}
         </Fragment>
       ))}
-      <Flex justify={'space-between'} my={10}>
+      <Flex justify="space-between" my={10}>
         <Button
           onClick={() => props.defaultBoard()}
           className="btn"
